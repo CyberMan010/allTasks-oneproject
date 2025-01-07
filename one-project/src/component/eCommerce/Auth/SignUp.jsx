@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CustomButton from "../UI/Button";
 import CustomInput from "../UI/Input";
 
@@ -42,8 +42,8 @@ function SignUp() {
   const validatePassword = (value) => {
     if (!value) {
       setPasswordError("Password is required.");
-    } else if (value.length < 6) {
-      setPasswordError("Password must be at least 6 characters.");
+    } else if (value.length < 5) {
+      setPasswordError("Password must be at least 5 characters.");
     } else {
       setPasswordError("");
     }
@@ -92,7 +92,6 @@ function SignUp() {
     const isEmailAvailable = await checkEmailAvailability();
     if (!isEmailAvailable) {
       setFormError("This email is already registered. Please use a different email.");
-      return;
     }
 
     try {
@@ -189,6 +188,12 @@ function SignUp() {
             <CustomButton onClick={handleSignUp} className="w-full">
               Sign Up
             </CustomButton>
+             <p className="text-sm text-center text-gray-600">
+                           Don't have an account?{' '}
+                           <Link to="/login" className="text-blue-600 hover:underline">
+                             Login
+                           </Link>
+                         </p>
           </div>
         </div>
       )}

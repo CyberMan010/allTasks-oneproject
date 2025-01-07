@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import ProductList from "./component/eCommerce/productList";
 import ProductDetails from "./component/eCommerce/productDetails";
@@ -11,17 +11,31 @@ import ChatWindow from "./component/chat/ChatWindow";
 import CustomForm from "./component/Form/CustomForm";
 import TaskManagement from "./component/Tasks/TaskManagement";
 import { TasksProvider } from "./component/Tasks/myContext";
+import UserRoute from "./component/eCommerce/UtilsAuth/userRoute";
+import AdminRoute from "./component/eCommerce/UtilsAuth/adminRoute";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Check if the user is an admin on app load
-  useEffect(() => {
+  // Function to check if the user is signed in and set roles
+  const isAuthed = () => {
+    const accessToken = localStorage.getItem("access_token");
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.role === "admin") {
-      setIsAdmin(true);
+    if (accessToken && user) {
+      setIsAuthenticated(true);
+      setIsAdmin(user.role === "admin");
+    } else {
+      setIsAuthenticated(false);
+      setIsAdmin(false);
     }
+  };
+
+  // Check authentication on app load
+  useEffect(() => {
+    isAuthed();
   }, []);
+
 
   return (
     <Provider store={store}>
@@ -32,12 +46,12 @@ function App() {
             <div className="max-w-7xl mx-auto p-4 pt-8">
               <Routes>
                 <Route path="/" element={<ProductList isAdmin={isAdmin} />} />
-                <Route path="/login" element={<Login setIsAdmin={setIsAdmin} />} />
+                <Route path="/login" element={<Login setIsAdmin={setIsAdmin} setIsAuthenticated={setIsAuthenticated} />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/product/:id" element={<ProductDetails />} />
-                <Route path="/chat" element={<ChatWindow />} />
+                <Route path="/product/:id" element={<AdminRoute><ProductDetails /></AdminRoute>} />
+                <Route path="/chat" element={<UserRoute><ChatWindow /></UserRoute>} />
                 <Route path="/form" element={<CustomForm />} />
-                <Route path="/tasks" element={<TaskManagement />} />
+                <Route path="/tasks" element={<UserRoute><TaskManagement /></UserRoute>} />
               </Routes>
             </div>
           </div>

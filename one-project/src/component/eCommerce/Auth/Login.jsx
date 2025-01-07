@@ -4,7 +4,7 @@ import { login } from "../../../store/slices/authSlice";
 import axios from "../api/axios";
 import CustomButton from "../UI/Button";
 import CustomInput from "../UI/Input";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -19,7 +19,7 @@ function Login() {
   const validateEmail = (value) => {
     if (!value) {
       setEmailError("Email is required.");
-    } else if (!/\S+@\S+\.\S+/.test(value)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       setEmailError("Please enter a valid email address.");
     } else {
       setEmailError("");
@@ -30,8 +30,8 @@ function Login() {
   const validatePassword = (value) => {
     if (!value) {
       setPasswordError("Password is required.");
-    } else if (value.length < 6) {
-      setPasswordError("Password must be at least 6 characters.");
+    } else if (value.length < 5) {
+      setPasswordError("Password must be at least 5 characters.");
     } else {
       setPasswordError("");
     }
@@ -124,29 +124,74 @@ function Login() {
   return (
     <>
       {localStorage.getItem("access_token") && localStorage.getItem("user") ? (
-        <p className="text-red-500">You are already logged in</p>
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-50">
+          <div className="text-center space-y-4">
+            <p className="text-red-500 bg-red-50 px-6 py-3 rounded-lg font-medium">
+              You are already logged in
+            </p>
+            <Link 
+              to="/" 
+              className="inline-block px-6 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+            >
+              Get back home
+            </Link>
+          </div>
+        </div>
       ) : (
-        <div>
-          <CustomInput
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={handleEmailChange}
-            onBlur={() => validateEmail(email)} // Validate on blur
-          />
-          {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
-
-          <CustomInput
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={handlePasswordChange}
-            onBlur={() => validatePassword(password)} // Validate on blur
-          />
-          {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
-
-          <CustomButton onClick={handleLogin}>Login</CustomButton>
-          {formError && <p className="text-red-500 text-sm">{formError}</p>}
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-50">
+          <div className="bg-white p-8 rounded-2xl shadow-lg w-96 space-y-6">
+            <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
+              Welcome Back
+            </h2>
+            
+            <div className="space-y-4">
+              <div>
+                <CustomInput
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  onBlur={() => validateEmail(email)}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                {emailError && 
+                  <p className="mt-1 text-red-500 text-sm">{emailError}</p>
+                }
+              </div>
+  
+              <div>
+                <CustomInput
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                  onBlur={() => validatePassword(password)}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                {passwordError && 
+                  <p className="mt-1 text-red-500 text-sm">{passwordError}</p>
+                }
+              </div>
+  
+              <CustomButton 
+                onClick={handleLogin}
+                className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Login
+              </CustomButton>
+              
+              {formError && 
+                <p className="text-red-500 text-sm text-center">{formError}</p>
+              }
+              
+              <p className="text-sm text-center text-gray-600">
+                Don't have an account?{' '}
+                <Link to="/signup" className="text-blue-600 hover:underline">
+                  Sign up
+                </Link>
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </>

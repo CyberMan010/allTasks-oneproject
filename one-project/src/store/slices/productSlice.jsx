@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "../../component/eCommerce/api/axios";
+// import axios from "../../component/eCommerce/api/axios";
+import axios from "../../component/eCommerce/api/axios"
 
 // Fetch all products
 export const fetchProducts = createAsyncThunk(
@@ -25,7 +26,13 @@ export const updateProduct = createAsyncThunk(
   async ({ id, updatedProduct }) => {
     const response = await axios.put(
       `/products/${id}`,
-      updatedProduct
+      updatedProduct,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }
     );
     return response.data;
   }

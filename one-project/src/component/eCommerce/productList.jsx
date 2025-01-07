@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, deleteProduct, updateProduct } from "../../store/slices/productSlice"; 
 import ProductCard from "./productCard";
 
-function ProductList({ isAdmin }) {
+function ProductList() {
   const dispatch = useDispatch();
   const { products, status, error } = useSelector((state) => state.products);
+  const isAdmin = useSelector((state) => state.auth.isAdmin); 
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -28,11 +29,11 @@ function ProductList({ isAdmin }) {
   return (
     <div>
       {products.map((product) => (
-        <ProductCard 
-          key={product.id} 
-          product={product} 
-          onEdit={handleEdit} 
-          onDelete={handleDelete} 
+        <ProductCard
+          key={product.id}
+          product={product}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
           isAdmin={isAdmin} 
         />
       ))}
