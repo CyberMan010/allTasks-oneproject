@@ -13,6 +13,8 @@ import TaskManagement from "./component/Tasks/TaskManagement";
 import { TasksProvider } from "./component/Tasks/myContext";
 import UserRoute from "./component/eCommerce/UtilsAuth/userRoute";
 import AdminRoute from "./component/eCommerce/UtilsAuth/adminRoute";
+import Cart from "./component/eCommerce/UI/Cart";
+import Checkout from "./component/eCommerce/UI/checkout";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -48,10 +50,13 @@ function App() {
                 <Route path="/" element={<ProductList isAdmin={isAdmin} />} />
                 <Route path="/login" element={<Login setIsAdmin={setIsAdmin} setIsAuthenticated={setIsAuthenticated} />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/product/:id" element={<AdminRoute><ProductDetails /></AdminRoute>} />
+                <Route path="/product/:id" element={<ProductDetails />} />
                 <Route path="/chat" element={<UserRoute><ChatWindow /></UserRoute>} />
                 <Route path="/form" element={<CustomForm />} />
                 <Route path="/tasks" element={<UserRoute><TaskManagement /></UserRoute>} />
+                <Route path="/cart" element={<Cart />}/>
+                <Route path="/checkout" element={<UserRoute><Checkout /></UserRoute>}/>
+
               </Routes>
             </div>
           </div>

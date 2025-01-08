@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "./api/axios";
+import { Cartcontext } from "./context/cartContext";
+import Cart from "./UI/Cart";
+import { ShoppingCart } from "lucide-react";
 
 function ProductDetails() {
   const { id } = useParams();
+  const [showModal, setShowModal] = useState(false);
   const [product, setProduct] = useState(null);
   const [error, setError] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const { cartItems, addToCart } = useContext(Cartcontext);
 
   useEffect(() => {
     getProductDetails();
@@ -20,6 +25,13 @@ function ProductDetails() {
       setError(error.message);
     }
   }
+
+  const handleAddToCart = () => {
+    // Add to cart with current quantity
+    const productToAdd = { ...product, quantity };
+    addToCart(productToAdd);
+    setShowModal(true);
+  };
 
   if (error) {
     return (
@@ -38,7 +50,17 @@ function ProductDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative">
+      <button
+        className="fixed top-4 right-4 z-50 px-4 py-2 bg-[#abd373] text-white rounded-full flex items-center gap-2 hover:bg-[#96bc64] transition-colors"
+        onClick={() => setShowModal(true)}
+      >
+        <ShoppingCart className="h-5 w-5" />
+        <span className="font-bold">{cartItems.length}</span>
+      </button>
+
+      <Cart showModal={showModal} toggle={() => setShowModal(!showModal)} />
+
       <div className="max-w-7xl mx-auto">
         <div className="bg-white/10 rounded-lg overflow-hidden shadow-xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
@@ -88,7 +110,10 @@ function ProductDetails() {
                 </div>
               </div>
 
-              <button className="group relative w-full bg-[#abd373] text-gray-800 font-semibold py-3 px-6 rounded-full overflow-hidden transition-all duration-300 hover:bg-[#96bc64] hover:shadow-lg hover:shadow-[#abd373]/20">
+              <button 
+                onClick={handleAddToCart}
+                className="group relative w-full bg-[#abd373] text-gray-800 font-semibold py-3 px-6 rounded-full overflow-hidden transition-all duration-300 hover:bg-[#96bc64] hover:shadow-lg hover:shadow-[#abd373]/20"
+              >
                 <span className="relative z-10">Add to Cart</span>
                 <div className="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
               </button>

@@ -7,6 +7,7 @@ function ProductList() {
   const dispatch = useDispatch();
   const { products, status, error } = useSelector((state) => state.products);
   const isAdmin = useSelector((state) => state.auth.isAdmin); 
+  
 
   useEffect(() => {
     dispatch(fetchProducts());
