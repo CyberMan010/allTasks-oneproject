@@ -52,7 +52,7 @@ function ProductDetails() {
   return (
     <div className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 relative">
       <button
-        className="fixed top-4 right-4 z-50 px-4 py-2 bg-[#abd373] text-white rounded-full flex items-center gap-2 hover:bg-[#96bc64] transition-colors"
+        className="fixed top-11 right-4 z-50 px-4 py-2 bg-[#abd373] text-white rounded-full flex items-center gap-2 hover:bg-[#96bc64] transition-colors"
         onClick={() => setShowModal(true)}
       >
         <ShoppingCart className="h-5 w-5" />

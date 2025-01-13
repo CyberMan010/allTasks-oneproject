@@ -204,8 +204,8 @@ const Navbar = () => {
         {/* Mobile Navigation */}
         <div className={`md:hidden ${isOpen ? "block" : "hidden"} pb-4`}>
           <div className="flex flex-col space-y-2">
-            <NavItem to="/" icon={MessageCircle}>
-              Chat
+            <NavItem to="/" icon={Projector}>
+              eCommerce
             </NavItem>
             <NavItem to="/form" icon={FileText}>
               Form
